@@ -27,52 +27,29 @@ struct ContentView: View {
 
 
 struct BoxView1: View {
-    var body: some View{
-        ZStack{
+    @StateObject var weatherService = WeatherService()
+
+    var body: some View {
+        ZStack {
             RoundedRectangle(cornerRadius: 25)
-                .fill(.white)
+                .fill(Color.white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 300)
                 .opacity(0.3)
                 .padding(10)
             
-            
-            VStack{
-                Text("(Weather). Highest (TEMP)C, Lowest(TEMP)C")
-                    .foregroundStyle(.white)
-                    .font(.system(size: 12, weight: .bold))
+            VStack(alignment: .leading, spacing: 5) {
+                if let temperature = weatherService.weather?.current.temperature_2m {
+                    Text(String(format: "%.1f", temperature))
+                }
+                else {
+                    Text("Loading...")
+                    
+                }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(30)
-            .padding(.bottom,250)
-            
-            VStack{
-                Text("TEMP")
-                    .font(.system(size: 40))
-                    .foregroundColor(.white)
+            .onAppear {
+                weatherService.fetchWeather()
             }
-            .padding(30)
-            .padding(.bottom, 100)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            
-            VStack(alignment: .leading, spacing: 5) { // Adjust spacing as needed
-                Text("CITY")
-                    .fontWeight(.bold)
-                    .font(.system(size: 24))
-                Text("Day/Night")
-                Text("DAY, TIME")
-            }
-            .padding(30)
-            .padding(.top, 100)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .foregroundColor(.white)
-            
-            ZStack{
-                Text("SYMBOL")
-            }
-            .padding(30)
-            .padding(.top, 10)
-            .frame(maxWidth: .infinity, alignment: .trailing)
             .foregroundColor(.white)
         }
     }
@@ -95,7 +72,6 @@ struct sevenDayBoxView2: View {
                     Text("\(i)")
                 }
                 .foregroundColor(.white)
-                
                 
             }
             
